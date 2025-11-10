@@ -1,0 +1,29 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Eclipse
+.project
+.classpath
+.settings/
+.bin/
+
+# OS fájlok
+.DS_Store
+Thumbs.db
+
+# Log fájlok
+*.log
+
+# Környezeti konfigurációk
+*.env

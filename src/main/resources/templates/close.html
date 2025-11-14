@@ -42,75 +42,23 @@
         <!-- Hero -->
         <section id="hero" class="container">
             <header>
-                <h2>Forex Történelmi Árak (10 utolsó gyertya)</h2>
+                <h2>Pozíció Lezárása (Piaci áron)</h2>
             </header>
 
-            <form id="histForm" th:action="@{/history}" method="get">
+            <form th:action="@{/close}" method="post">
                 <label>
-                    Instrumentum:
-                    <select name="instrument" onchange="validateAndSubmit()">
-                        <option value="">-- Válassz --</option>
-                        <option th:each="inst : ${instruments}"
-                                th:value="${inst}"
-                                th:text="${inst}"
-                                th:selected="${inst == selectedInst}"></option>
-                    </select>
+                    Trade ID:
+                    <input type="number" name="tradeIdStr" required placeholder="pl. 12345" min="1">
                 </label>
-                &nbsp;
-                <label>
-                    Időintervallum:
-                    <select name="granularity" onchange="validateAndSubmit()">
-                        <option value="">-- Válassz --</option>
-                        <option th:each="g : ${granularities}"
-                                th:value="${g}"
-                                th:text="${g}"
-                                th:selected="${g == selectedGran}"></option>
-                    </select>
-                </label>
+                <br><br>
+                <button type="submit">Pozíció lezárása</button>
             </form>
 
-            <script>
-                function validateAndSubmit() {
-                    const instrument = document.querySelector('select[name="instrument"]').value;
-                    const granularity = document.querySelector('select[name="granularity"]').value;
-
-                    if (instrument && granularity) {
-                        document.getElementById('histForm').submit();
-                    }
-                }
-            </script>
-
-            <!-- ADATOK CSAK HA VAN KÉSZ VÁLASZ -->
-            <div th:if="${candles != null && !candles.isEmpty()}">
-                <h3 th:text="${selectedInst} + ' – ' + ${selectedGran}">EUR_USD – D</h3>
-                <table border="1" style="margin-top:10px; border-collapse: collapse; width: 100%;">
-                    <tr>
-                        <th>Időpont</th>
-                        <th>Open</th>
-                        <th>High</th>
-                        <th>Low</th>
-                        <th>Close</th>
-                    </tr>
-                    <tr th:each="c : ${candles}">
-                        <td th:text="${c.time}"></td>
-                        <td th:text="${c.mid.o}"></td>
-                        <td th:text="${c.mid.h}"></td>
-                        <td th:text="${c.mid.l}"></td>
-                        <td th:text="${c.mid.c}"></td>
-                    </tr>
-                </table>
-            </div>
-
-            <!-- HIBAÜZENET -->
-            <div th:if="${error}" style="color:red; margin-top: 20px;" th:text="${error}"></div>
-
-            <!-- HA MÉG NEM VÁLASZTOTT KI SEMMIT -->
-            <div th:if="${selectedInst == null || selectedGran == null}" style="color: #666; margin-top: 20px;">
-                <p>Válassz instrumentumot és időintervallumot!</p>
-            </div>
+            <div th:if="${success}" style="color:green; margin-top:20px;" th:text="${success}"></div>
+            <div th:if="${error}" style="color:red; margin-top:20px;" th:text="${error}"></div>
 
             <hr>
-            <a th:href="@{/}">Vissza a főoldalra</a>
+            <a th:href="@{/}">Vissza</a>
         </section>
 
     </div>

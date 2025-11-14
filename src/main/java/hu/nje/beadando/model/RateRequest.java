@@ -1,6 +1,8 @@
 package hu.nje.beadando.model;
 
-public class RateRequest {
+import java.io.Serializable;
+
+public class RateRequest implements Serializable {
     private String currency;
     private String startDate;
     private String endDate;

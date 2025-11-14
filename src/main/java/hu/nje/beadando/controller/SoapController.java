@@ -4,6 +4,7 @@ import hu.nje.beadando.soapclient.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import hu.nje.beadando.model.*;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -82,40 +83,41 @@ public class SoapController {
 
 }
 
-class RateRequest {
-    private String currency;
-    private String startDate;
-    private String endDate;
+//class RateRequest {
+//    private String currency;
+//    private String startDate;
+//    private String endDate;
+//
+//    public String getCurrency() {
+//        return currency;
+//    }
+//    public void setCurrency(String currency) { this.currency = currency; }
+//    public String getStartDate() {return startDate;}
+//    public void setStartDate(String startDate) { this.startDate = startDate;}
+//    public String getEndDate() {return endDate;}
+//    public void setEndDate(String endDate) { this.endDate = endDate;}
+//}
 
-    public String getCurrency() {
-        return currency;
-    }
-    public void setCurrency(String currency) { this.currency = currency; }
-    public String getStartDate() {return startDate;}
-    public void setStartDate(String startDate) { this.startDate = startDate;}
-    public String getEndDate() {return endDate;}
-    public void setEndDate(String endDate) { this.endDate = endDate;}
-}
+//class Rate {
+//    private String date;
+//    private double value;
+//    private String currency = "HUF";
+//
+//    public Rate(String date, double value) {
+//        this.date = date;
+//        this.value = value;
+//    }
+//
+//    public String getDate() {
+//        return date;
+//    }
+//
+//    public double getValue() {
+//        return value;
+//    }
+//
+//    public String getCurrency() {
+//        return currency;
+//    }
+//}
 
-class Rate {
-    private String date;
-    private double value;
-    private String currency = "HUF";
-
-    public Rate(String date, double value) {
-        this.date = date;
-        this.value = value;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-}

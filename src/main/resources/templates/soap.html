@@ -54,7 +54,7 @@
             </tbody>
         </table>
 
-        <div class="chart-container">
+        <div class="chart-container mt-5" th:if="${rates != null and !rates.isEmpty()}">
             <canvas id="chart"></canvas>
         </div>
     </div>
@@ -64,47 +64,43 @@
         Nincs adat a megadott időszakra.
     </div>
 
-    <!-- JAVÍTOTT SCRIPT -->
-    <script th:if="${rates != null and !rates.isEmpty()}">
-        const labels = [
-            <th:block th:each="rate : ${rates}">
-                '<span th:text="${rate.date}"></span>'<th:block th:unless="${rateStat.last}">, </th:block>
-            </th:block>
-        ];
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Chart script betöltve!');
 
-        const data = [
-            <th:block th:each="rate : ${rates}">
-                <span th:text="${rate.value}"></span><th:block th:unless="${rateStat.last}">, </th:block>
-            </th:block>
-        ];
+            const rates = /*[[${rates}]]*/ [];
+            const currency = /*[[${currency}]]*/ '';
 
-        new Chart(document.getElementById('chart'), {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: [[${currency}]] + ' árfolyam (HUF)',
-                    data: data,
-                    borderColor: 'rgb(54, 162, 235)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                    tension: 0.1,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: [[${currency}]] + ' árfolyam alakulása'
-                    }
-                },
-                scales: {
-                    y: { beginAtZero: false }
-                }
+            rates.reverse();
+            console.log('Beolvasott rates:', rates);
+            console.log('Beolvasott currency:', currency);
+
+            if (!rates || rates.length === 0) {
+                console.log('Nincs adat a grafikonhoz.');
+                return;
             }
+
+            const labels = rates.map(r => r.date);
+            const data = rates.map(r => r.value);
+
+            const ctx = document.getElementById('chart');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: currency + ' árfolyam (HUF)',
+                        data: data,
+                        borderWidth: 2
+                    }]
+                }
+            });
         });
+        /*]]>*/
     </script>
+
 </div>
 </body>
 </html>

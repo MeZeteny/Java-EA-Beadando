@@ -42,33 +42,37 @@
         <!-- Hero -->
         <section id="hero" class="container">
             <header>
-                <h2>Forex Aktuális Ár</h2>
+                <h2>Nyitott Pozíciók</h2>
             </header>
-
-            <form th:action="@{/aktar}" method="get">
-                <label>
-                    Instrumentum:
-                    <select name="instrument" onchange="this.form.submit()">
-                        <option value="">-- Válassz --</option>
-                        <option th:each="inst : ${instruments}"
-                                th:value="${inst}"
-                                th:text="${inst}"
-                                th:selected="${inst == selected}"></option>
-                    </select>
-                </label>
-            </form>
-
-            <div th:if="${bid != null}">
-                <h3 th:text="${selected}">EUR_USD</h3>
-                <p><strong>Bid (eladási ár):</strong> <span th:text="${bid}"></span></p>
-                <p><strong>Ask (vételi ár):</strong> <span th:text="${ask}"></span></p>
-                <p><strong>Frissítve:</strong> <span th:text="${time}"></span></p>
-            </div>
 
             <div th:if="${error}" style="color:red" th:text="${error}"></div>
 
+            <div th:if="${hasTrades}">
+                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 10px;">
+                    <tr>
+                        <th>Trade ID</th>
+                        <th>Instrumentum</th>
+                        <th>Mennyiség</th>
+                        <th>Nyitási ár</th>
+                        <th>Aktuális ár</th>
+                        <th>P/L (GBP)</th>
+                    </tr>
+                    <tr th:each="t : ${trades}">
+                        <td th:text="${t.id}"></td>
+                        <td th:text="${t.instrument}"></td>
+                        <td th:text="${t.currentUnits}"></td>
+                        <td th:text="${t.price}"></td>
+                        <td th:text="${t.unrealizedPL}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div th:if="${!hasTrades}" style="color: #666; margin-top: 20px;">
+                <p>Nincs nyitott pozíció.</p>
+            </div>
+
             <hr>
-            <a th:href="@{/}">Vissza</a>
+            <a th:href="@{/}">Vissza a főoldalra</a>
         </section>
 
     </div>

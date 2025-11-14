@@ -6,15 +6,10 @@
 -->
 <html>
 <head>
-    <title>MNB Árfolyam</title>
+    <title>Java EA beadandó</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../assets/css/main.css" />
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">-->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-        .chart-container { max-width: 800px; margin: 2rem auto; }
-    </style>
 </head>
 <body class="homepage is-preload">
 <div id="page-wrapper">
@@ -34,7 +29,7 @@
                         <a th:href="@{/soap}">SOAP</a>
                     </li>
                     <li><a th:href="@{/account}">Forex-account</a></li>
-                    <li><a th:href="@{/aktar}">Forex-AktÁr</a></li>
+                    <li><a href="">Forex-AktÁr</a></li>
                     <li class="break"><a href="">Forex-HistÁr</a></li>
                     <li><a href="">Forex-Nyit</a></li>
                     <li><a href="">Forex-Poz</a></li>
@@ -47,100 +42,37 @@
         <!-- Hero -->
         <section id="hero" class="container">
             <header>
-                <h2>MNB Deviza Árfolyam Lekérdezés</h2>
+                <h2>Forex Aktuális Ár</h2>
             </header>
 
-            <form th:object="${rateRequest}" method="post" class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label">Deviza</label>
-                    <select th:field="*{currency}" class="form-select" required>
+            <form th:action="@{/aktar}" method="get">
+                <label>
+                    Instrumentum:
+                    <select name="instrument" onchange="this.form.submit()">
                         <option value="">-- Válassz --</option>
-                        <option value="EUR">EUR</option>
-                        <option value="USD">USD</option>
-                        <option value="GBP">GBP</option>
-                        <option value="CHF">CHF</option>
+                        <option th:each="inst : ${instruments}"
+                                th:value="${inst}"
+                                th:text="${inst}"
+                                th:selected="${inst == selected}"></option>
                     </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Kezdő dátum</label>
-                    <input type="date" th:field="*{startDate}" class="form-control" required>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Befejező dátum</label>
-                    <input type="date" th:field="*{endDate}" class="form-control" required>
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">Lekérdezés</button>
-                </div>
+                </label>
             </form>
 
-            <div th:if="${error}" class="alert alert-danger mt-3" th:text="${error}"></div>
-
-            <!-- TÁBLÁZAT ÉS GRAFIKON -->
-            <div th:if="${rates != null and !rates.isEmpty()}">
-                <h3 class="mt-5" th:text="${currency} + ' árfolyamok'"></h3>
-                <table class="table table-striped">
-                    <thead>
-                    <tr><th>Dátum</th><th>Árfolyam (HUF)</th></tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="rate : ${rates}">
-                        <td th:text="${rate.date}"></td>
-                        <td th:text="${rate.value}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <div class="chart-container mt-5" th:if="${rates != null and !rates.isEmpty()}">
-                    <canvas id="chart"></canvas>
-                </div>
+            <div th:if="${bid != null}">
+                <h3 th:text="${selected}">EUR_USD</h3>
+                <p><strong>Bid (eladási ár):</strong> <span th:text="${bid}"></span></p>
+                <p><strong>Ask (vételi ár):</strong> <span th:text="${ask}"></span></p>
+                <p><strong>Frissítve:</strong> <span th:text="${time}"></span></p>
             </div>
 
-            <!-- ÜRES EREDMÉNY -->
-            <div th:if="${rates != null and rates.isEmpty()}" class="alert alert-info mt-3">
-                Nincs adat a megadott időszakra.
-            </div>
+            <div th:if="${error}" style="color:red" th:text="${error}"></div>
 
-            <script th:inline="javascript">
-                /*<![CDATA[*/
-                document.addEventListener('DOMContentLoaded', function() {
-                    console.log('Chart script betöltve!');
-
-                    const rates = /*[[${rates}]]*/ [];
-                    const currency = /*[[${currency}]]*/ '';
-
-                    rates.reverse();
-                    console.log('Beolvasott rates:', rates);
-                    console.log('Beolvasott currency:', currency);
-
-                    if (!rates || rates.length === 0) {
-                        console.log('Nincs adat a grafikonhoz.');
-                        return;
-                    }
-
-                    const labels = rates.map(r => r.date);
-                    const data = rates.map(r => r.value);
-
-                    const ctx = document.getElementById('chart');
-
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: currency + ' árfolyam (HUF)',
-                                data: data,
-                                borderWidth: 2
-                            }]
-                        }
-                    });
-                });
-                /*]]>*/
-            </script>
-
+            <hr>
+            <a th:href="@{/}">Vissza</a>
         </section>
 
     </div>
+
 
     <!-- Footer -->
     <div id="footer-wrapper">

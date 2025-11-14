@@ -42,30 +42,31 @@
         <!-- Hero -->
         <section id="hero" class="container">
             <header>
-                <h2>Forex Aktuális Ár</h2>
+                <h2>Forex Pozíció Nyitása (Piaci áron)</h2>
             </header>
 
-            <form th:action="@{/aktar}" method="get">
+            <form th:action="@{/open}" method="post">
                 <label>
                     Instrumentum:
-                    <select name="instrument" onchange="this.form.submit()">
+                    <select name="instrument" required>
                         <option value="">-- Válassz --</option>
                         <option th:each="inst : ${instruments}"
                                 th:value="${inst}"
                                 th:text="${inst}"
-                                th:selected="${inst == selected}"></option>
+                                th:selected="${inst == selectedInst}"></option>
                     </select>
                 </label>
+                <br><br>
+                <label>
+                    Mennyiség (pozitív = Long, negatív = Short):
+                    <input type="number" name="units" th:value="${units}" required placeholder="pl. 1000 vagy -500">
+                </label>
+                <br><br>
+                <button type="submit">Pozíció nyitása</button>
             </form>
 
-            <div th:if="${bid != null}">
-                <h3 th:text="${selected}">EUR_USD</h3>
-                <p><strong>Bid (eladási ár):</strong> <span th:text="${bid}"></span></p>
-                <p><strong>Ask (vételi ár):</strong> <span th:text="${ask}"></span></p>
-                <p><strong>Frissítve:</strong> <span th:text="${time}"></span></p>
-            </div>
-
-            <div th:if="${error}" style="color:red" th:text="${error}"></div>
+            <div th:if="${success}" style="color:green; margin-top:20px;" th:text="${success}"></div>
+            <div th:if="${error}" style="color:red; margin-top:20px;" th:text="${error}"></div>
 
             <hr>
             <a th:href="@{/}">Vissza</a>

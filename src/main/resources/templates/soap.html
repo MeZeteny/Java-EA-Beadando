@@ -1,106 +1,209 @@
-<!DOCTYPE html>
-<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE HTML>
+<!--
+	Telephasic by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>MNB Árfolyam</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         .chart-container { max-width: 800px; margin: 2rem auto; }
     </style>
 </head>
-<body>
-<div class="container mt-4">
-    <h1>MNB Deviza Árfolyam Lekérdezés</h1>
+<body class="homepage is-preload">
+<div id="page-wrapper">
 
-    <form th:object="${rateRequest}" method="post" class="row g-3">
-        <div class="col-md-3">
-            <label class="form-label">Deviza</label>
-            <select th:field="*{currency}" class="form-select" required>
-                <option value="">-- Válassz --</option>
-                <option value="EUR">EUR</option>
-                <option value="USD">USD</option>
-                <option value="GBP">GBP</option>
-                <option value="CHF">CHF</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label class="form-label">Kezdő dátum</label>
-            <input type="date" th:field="*{startDate}" class="form-control" required>
-        </div>
-        <div class="col-md-3">
-            <label class="form-label">Befejező dátum</label>
-            <input type="date" th:field="*{endDate}" class="form-control" required>
-        </div>
-        <div class="col-md-3 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">Lekérdezés</button>
-        </div>
-    </form>
+    <!-- Header -->
+    <div id="header-wrapper">
+        <div id="header" class="container">
 
-    <div th:if="${error}" class="alert alert-danger mt-3" th:text="${error}"></div>
+            <!-- Logo -->
+            <h1 id="logo"><a th:href="@{/index}">Forex beadandó</a></h1>
 
-    <!-- TÁBLÁZAT ÉS GRAFIKON -->
-    <div th:if="${rates != null and !rates.isEmpty()}">
-        <h3 class="mt-5" th:text="${currency} + ' árfolyamok'"></h3>
-        <table class="table table-striped">
-            <thead>
-            <tr><th>Dátum</th><th>Árfolyam (HUF)</th></tr>
-            </thead>
-            <tbody>
-            <tr th:each="rate : ${rates}">
-                <td th:text="${rate.date}"></td>
-                <td th:text="${rate.value}"></td>
-            </tr>
-            </tbody>
-        </table>
+            <!-- Nav -->
+            <nav id="nav">
+                <ul>
+                    <li><a th:href="@{/index}">Főoldal</a></li>
+                    <li>
+                        <a th:href="@{/soap}">SOAP</a>
+                    </li>
+                    <li><a >Forex-account</a></li>
+                    <li><a href="">Forex-AktÁr</a></li>
+                    <li class="break"><a href="">Forex-HistÁr</a></li>
+                    <li><a href="">Forex-Nyit</a></li>
+                    <li><a href="">Forex-Poz</a></li>
+                    <li><a href="">Forex-Zár</a></li>
+                </ul>
+            </nav>
 
-        <div class="chart-container mt-5" th:if="${rates != null and !rates.isEmpty()}">
-            <canvas id="chart"></canvas>
         </div>
+
+        <!-- Hero -->
+        <section id="hero" class="container">
+            <header>
+                <h2>MNB Deviza Árfolyam Lekérdezés</h2>
+            </header>
+
+            <form th:object="${rateRequest}" method="post" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Deviza</label>
+                    <select th:field="*{currency}" class="form-select" required>
+                        <option value="">-- Válassz --</option>
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                        <option value="GBP">GBP</option>
+                        <option value="CHF">CHF</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Kezdő dátum</label>
+                    <input type="date" th:field="*{startDate}" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Befejező dátum</label>
+                    <input type="date" th:field="*{endDate}" class="form-control" required>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Lekérdezés</button>
+                </div>
+            </form>
+
+            <div th:if="${error}" class="alert alert-danger mt-3" th:text="${error}"></div>
+
+            <!-- TÁBLÁZAT ÉS GRAFIKON -->
+            <div th:if="${rates != null and !rates.isEmpty()}">
+                <h3 class="mt-5" th:text="${currency} + ' árfolyamok'"></h3>
+                <table class="table table-striped">
+                    <thead>
+                    <tr><th>Dátum</th><th>Árfolyam (HUF)</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rate : ${rates}">
+                        <td th:text="${rate.date}"></td>
+                        <td th:text="${rate.value}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="chart-container mt-5" th:if="${rates != null and !rates.isEmpty()}">
+                    <canvas id="chart"></canvas>
+                </div>
+            </div>
+
+            <!-- ÜRES EREDMÉNY -->
+            <div th:if="${rates != null and rates.isEmpty()}" class="alert alert-info mt-3">
+                Nincs adat a megadott időszakra.
+            </div>
+
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                document.addEventListener('DOMContentLoaded', function() {
+                    console.log('Chart script betöltve!');
+
+                    const rates = /*[[${rates}]]*/ [];
+                    const currency = /*[[${currency}]]*/ '';
+
+                    rates.reverse();
+                    console.log('Beolvasott rates:', rates);
+                    console.log('Beolvasott currency:', currency);
+
+                    if (!rates || rates.length === 0) {
+                        console.log('Nincs adat a grafikonhoz.');
+                        return;
+                    }
+
+                    const labels = rates.map(r => r.date);
+                    const data = rates.map(r => r.value);
+
+                    const ctx = document.getElementById('chart');
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: currency + ' árfolyam (HUF)',
+                                data: data,
+                                borderWidth: 2
+                            }]
+                        }
+                    });
+                });
+                /*]]>*/
+            </script>
+
+        </section>
+
     </div>
 
-    <!-- ÜRES EREDMÉNY -->
-    <div th:if="${rates != null and rates.isEmpty()}" class="alert alert-info mt-3">
-        Nincs adat a megadott időszakra.
+    <!-- Footer -->
+    <div id="footer-wrapper">
+        <div id="footer" class="container">
+            <header class="major">
+                <h2>Euismod aliquam vehicula lorem</h2>
+                <p>Lorem ipsum dolor sit amet consectetur et sed adipiscing elit. Curabitur vel sem sit<br />
+                    dolor neque semper magna lorem ipsum feugiat veroeros lorem ipsum dolore.</p>
+            </header>
+            <div class="row">
+                <section class="col-6 col-12-narrower">
+                    <form method="post" action="#">
+                        <div class="row gtr-50">
+                            <div class="col-6 col-12-mobile">
+                                <input name="name" placeholder="Name" type="text" />
+                            </div>
+                            <div class="col-6 col-12-mobile">
+                                <input name="email" placeholder="Email" type="text" />
+                            </div>
+                            <div class="col-12">
+                                <textarea name="message" placeholder="Message"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <ul class="actions">
+                                    <li><input type="submit" value="Send Message" /></li>
+                                    <li><input type="reset" value="Clear form" /></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+                <section class="col-6 col-12-narrower">
+                    <div class="row gtr-0">
+                        <ul class="divided icons col-6 col-12-mobile">
+                            <li class="icon brands fa-twitter"><a href="#"><span class="extra">twitter.com/</span>untitled</a></li>
+                            <li class="icon brands fa-facebook-f"><a href="#"><span class="extra">facebook.com/</span>untitled</a></li>
+                            <li class="icon brands fa-dribbble"><a href="#"><span class="extra">dribbble.com/</span>untitled</a></li>
+                        </ul>
+                        <ul class="divided icons col-6 col-12-mobile">
+                            <li class="icon brands fa-instagram"><a href="#"><span class="extra">instagram.com/</span>untitled</a></li>
+                            <li class="icon brands fa-youtube"><a href="#"><span class="extra">youtube.com/</span>untitled</a></li>
+                            <li class="icon brands fa-pinterest"><a href="#"><span class="extra">pinterest.com/</span>untitled</a></li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div id="copyright" class="container">
+            <ul class="menu">
+                <li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+            </ul>
+        </div>
     </div>
-
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Chart script betöltve!');
-
-            const rates = /*[[${rates}]]*/ [];
-            const currency = /*[[${currency}]]*/ '';
-
-            rates.reverse();
-            console.log('Beolvasott rates:', rates);
-            console.log('Beolvasott currency:', currency);
-
-            if (!rates || rates.length === 0) {
-                console.log('Nincs adat a grafikonhoz.');
-                return;
-            }
-
-            const labels = rates.map(r => r.date);
-            const data = rates.map(r => r.value);
-
-            const ctx = document.getElementById('chart');
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: currency + ' árfolyam (HUF)',
-                        data: data,
-                        borderWidth: 2
-                    }]
-                }
-            });
-        });
-        /*]]>*/
-    </script>
 
 </div>
+
+<!-- Scripts -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script src="../static/assets/js/jquery.dropotron.min.js"></script>
+<script src="../static/assets/js/browser.min.js"></script>
+<script src="../static/assets/js/breakpoints.min.js"></script>
+<script src="../static/assets/js/util.js"></script>
+<script src="../static/assets/js/main.js"></script>
+
 </body>
 </html>

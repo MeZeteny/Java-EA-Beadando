@@ -12,6 +12,11 @@ import java.util.ArrayList;
 @Controller
 public class SoapController {
 
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
+
     @GetMapping("/soap")
     public String showForm(Model model) {
         model.addAttribute("rateRequest", new RateRequest());
